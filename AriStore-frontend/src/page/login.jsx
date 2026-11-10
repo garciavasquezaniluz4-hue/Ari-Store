@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import {
   DEMO_CREDENTIALS,
+  EMAIL_PATTERN,
+  MIN_PASSWORD_LENGTH,
   getLockRemainingMs,
   login,
   recordFailedAttempt,
 } from '../services/auth.js'
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const MIN_PASSWORD_LENGTH = 12
 
 const formatRemaining = (ms) => {
   const totalSeconds = Math.max(0, Math.ceil(ms / 1000))
@@ -16,7 +15,7 @@ const formatRemaining = (ms) => {
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 }
 
-function Login({ onLoginSuccess }) {
+function Login({ onLoginSuccess, onRegisterClick }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -118,23 +117,43 @@ function Login({ onLoginSuccess }) {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-100 via-white to-indigo-100 px-4 py-10">
-      <section className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/60 sm:p-8">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-lime-50 via-amber-50 to-emerald-100 px-4 py-10">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-lime-300/40 blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-24 -right-20 h-80 w-80 rounded-full bg-orange-200/60 blur-3xl"
+      />
+
+      <section className="relative w-full max-w-md rounded-3xl border border-emerald-100 bg-white/90 p-6 shadow-xl shadow-emerald-200/60 backdrop-blur sm:p-8">
         <div className="mb-6 flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-indigo-600 text-xl font-bold text-white">
-            A
+          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-600 text-2xl shadow-sm shadow-emerald-300">
+            <span aria-hidden="true">🍏</span>
           </span>
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-indigo-600">
-              AriStore
+            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+              AriStore Frutas
             </p>
-            <h1 className="text-2xl font-bold text-slate-900">Inicia sesión</h1>
+            <h1 className="text-2xl font-bold text-emerald-950">Inicia sesión</h1>
           </div>
         </div>
 
-        <p className="mb-6 text-sm text-slate-600">
-          Accede a tu cuenta para gestionar tus compras de forma segura.
+        <p className="mb-4 text-sm text-slate-600">
+          Accede a tu cuenta y recibe frutas frescas directo a tu puerta.
         </p>
+
+        <div
+          aria-hidden="true"
+          className="mb-6 flex items-center justify-center gap-3 text-2xl"
+        >
+          <span>🍓</span>
+          <span>🍊</span>
+          <span>🍇</span>
+          <span>🍉</span>
+          <span>🍌</span>
+        </div>
 
         {isLocked && (
           <div
@@ -168,7 +187,7 @@ function Login({ onLoginSuccess }) {
           <div>
             <label
               htmlFor="email"
-              className="mb-1.5 block text-sm font-semibold text-slate-800"
+              className="mb-1.5 block text-sm font-semibold text-emerald-950"
             >
               Correo electrónico
             </label>
@@ -183,8 +202,8 @@ function Login({ onLoginSuccess }) {
               aria-invalid={Boolean(fieldErrors.email)}
               aria-describedby={fieldErrors.email ? 'email-error' : undefined}
               placeholder="usuario@dominio.com"
-              className={`w-full rounded-xl border bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 ${
-                fieldErrors.email ? 'border-red-400' : 'border-slate-300'
+              className={`w-full rounded-xl border bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
+                fieldErrors.email ? 'border-red-400' : 'border-emerald-200'
               }`}
             />
             {fieldErrors.email && (
@@ -202,7 +221,7 @@ function Login({ onLoginSuccess }) {
             <div className="mb-1.5 flex items-center justify-between gap-3">
               <label
                 htmlFor="password"
-                className="text-sm font-semibold text-slate-800"
+                className="text-sm font-semibold text-emerald-950"
               >
                 Contraseña
               </label>
@@ -211,7 +230,7 @@ function Login({ onLoginSuccess }) {
                 onClick={() => setShowPassword((current) => !current)}
                 aria-controls="password"
                 aria-pressed={showPassword}
-                className="rounded-md text-sm font-semibold text-indigo-600 transition hover:text-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="rounded-md text-sm font-semibold text-emerald-700 transition hover:text-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
               >
                 {showPassword ? 'Ocultar' : 'Mostrar'}
               </button>
@@ -229,8 +248,8 @@ function Login({ onLoginSuccess }) {
                 fieldErrors.password ? 'password-error' : undefined
               }
               placeholder="Mínimo 12 caracteres"
-              className={`w-full rounded-xl border bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 ${
-                fieldErrors.password ? 'border-red-400' : 'border-slate-300'
+              className={`w-full rounded-xl border bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
+                fieldErrors.password ? 'border-red-400' : 'border-emerald-200'
               }`}
             />
             {fieldErrors.password && (
@@ -247,20 +266,31 @@ function Login({ onLoginSuccess }) {
           <button
             type="submit"
             disabled={isSubmitting || isLocked}
-            className="w-full rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:bg-slate-300"
+            className="w-full rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-sm shadow-emerald-200 transition hover:bg-emerald-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 disabled:cursor-not-allowed disabled:bg-slate-300"
           >
             {isSubmitting ? 'Verificando...' : 'Iniciar sesión'}
           </button>
         </form>
 
-        <div className="mt-6 rounded-xl bg-slate-50 p-4 text-xs text-slate-600 ring-1 ring-slate-200">
-          <p className="font-semibold text-slate-800">
+        <div className="mt-6 rounded-xl bg-lime-50 p-4 text-xs text-lime-900 ring-1 ring-lime-200">
+          <p className="font-semibold text-emerald-900">
             Credenciales de demostración
           </p>
           <p className="mt-1 break-all">
             {DEMO_CREDENTIALS.email} · {DEMO_CREDENTIALS.password}
           </p>
         </div>
+
+        <p className="mt-6 text-center text-sm text-slate-600">
+          ¿No tienes cuenta?{' '}
+          <button
+            type="button"
+            onClick={onRegisterClick}
+            className="font-semibold text-emerald-700 underline-offset-4 transition hover:text-emerald-800 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+          >
+            Crear una cuenta
+          </button>
+        </p>
       </section>
     </main>
   )

@@ -1,0 +1,86 @@
+:root {
+  --accent: #0f172a;          /* Color principal (Azul marino oscuro / elegante) */
+  --accent-bg: #f8fafc;       /* Fondo suave */
+  --accent-border: #3b82f6;   /* Color de borde al pasar el cursor (Azul brillante) */
+  --border: #e2e8f0;          /* Color de las líneas divisorias */
+  --text-h: #1e293b;          /* Color de los títulos */
+  --social-bg: #ffffff;       /* Fondo de tarjetas o botones */
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+.counter {
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #ffffff;
+  background: var(--accent);
+  border: 2px solid transparent;
+  transition: all 0.3s;
+  margin-bottom: 24px;
+  cursor: pointer;
+  font-weight: 600;
+
+  &:hover {
+    background: #1e293b;
+    border-color: var(--accent-border);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.hero {
+  text-align: center;
+  padding: 40px 20px;
+
+  h1 {
+    font-size: 2.5rem;
+    color: var(--text-h);
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: #64748b;
+  }
+}
+
+#center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+#next-steps {
+  display: flex;
+  width: 100%;
+  max-width: 800px;
+  border-top: 1px solid var(--border);
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+
+  & > div {
+    flex: 1;
+    padding: 24px;
+  }
+}
+
+#docs {
+  border-right: 1px solid var(--border);
+}
+
+#spacer {
+  height: 40px;
+}qui
